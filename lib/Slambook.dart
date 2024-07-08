@@ -82,7 +82,8 @@ class _SlambookState extends State<Slambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Slambook'),backgroundColor: Colors.indigo,),
+      appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
+      backgroundColor: Color.fromARGB(255, 195,211,235),
       drawer: drawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -264,7 +265,8 @@ class _SlambookState extends State<Slambook> {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(child: Text("Exercise 5: Menu, Routes, and Navigation")),
+          DrawerHeader(child: Text("Exercise 5: Menu, Routes, and Navigation", style: TextStyle(color: Colors.white),),
+          decoration: BoxDecoration(color:Color.fromARGB(255,14,14,66)),),
           ListTile(
             title: Text("Friends"),
             onTap: () {
