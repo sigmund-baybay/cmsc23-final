@@ -24,8 +24,6 @@
 
 ## References
 
-- link to the reference
-- another link
 - [Switch Widgets](https://api.flutter.dev/flutter/material/Switch-class.html)
 - [Slider Widgets](https://api.flutter.dev/flutter/material/Slider-class.html)
 - [ListView](https://api.flutter.dev/flutter/widgets/ListView-class.html)
