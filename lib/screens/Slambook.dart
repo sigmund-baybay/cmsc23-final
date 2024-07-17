@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_app_exr4/models/friends_model.dart';
+import 'package:flutter_app_exr4/providers/slambook_provider.dart';
+import 'package:provider/provider.dart';
 
 class Slambook extends StatefulWidget {
-  final Map<String, dynamic> friendList;
 
-  Slambook({required this.friendList, super.key});
+  Slambook({super.key});
 
   @override
   _SlambookState createState() => _SlambookState();
@@ -39,8 +41,8 @@ class _SlambookState extends State<Slambook> {
   final TextEditingController _ageController = TextEditingController();
   bool _relationshipStatus = false;
   double _happinessLevel = 0;
-  String? _superpower = _dropdownOptions.first;
-  String? _favoriteMotto = _motto.first;
+  String _superpower = _dropdownOptions.first;
+  String _favoriteMotto = _motto.first;
 
   
   void _resetForm() {
@@ -57,26 +59,37 @@ class _SlambookState extends State<Slambook> {
   }
 
   void _submitForm() {
-  if (_formKey.currentState?.validate() ?? false) {
-    final newEntry = {
-      'Name': _nameController.text,
-      'Nickname': _nicknameController.text,
-      'Age': _ageController.text,
-      'Relationship Status': _relationshipStatus ? "Single" : "Not Single",
-      'Happiness Level': _happinessLevel,
-      'Superpower': _superpower,
-      'Favorite Motto': _favoriteMotto,
-    };
+    if (_formKey.currentState?.validate() ?? false) {
+      String name = _nameController.text;
 
-    setState(() {
-      widget.friendList['${_nameController.text}'] = newEntry;
-      summary();
-    }); 
+      // bool exists = context.read<FriendsListProvider>().checkExistingName(name);
 
-    print(widget.friendList['${_nameController.text}']);
+      // if(exists){
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('Name already exists')));
+      //     _resetForm();
+      //     return;
+      // }
 
+      Friend newFriend = 
+      Friend(name: name, 
+      nickname: _nicknameController.text, 
+      age: int.parse(_ageController.text), 
+      relationshipStatus: _relationshipStatus ? "Single" : "Not Single", 
+      happinessLevel: _happinessLevel, 
+      superpower: _superpower, 
+      favoriteMoto: _favoriteMotto);
+
+      setState(() {
+        context.read<FriendsListProvider>().addFriend(newFriend);
+        summary(newFriend);
+      });
+      
+
+      print(newFriend.name);
+
+    }
   }
-}
 
 
   @override
@@ -138,10 +151,10 @@ class _SlambookState extends State<Slambook> {
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter some text';
+                        return 'Please enter a number';
                       }
                       if (int.tryParse(value) == null) {
-                        return 'Please enter some text';
+                        return 'Please enter valid number';
                       }
                       return null;
                     },
@@ -201,7 +214,7 @@ class _SlambookState extends State<Slambook> {
                     }).toList(),
                     onChanged: (String? newValue) {
                       setState(() {
-                        _superpower = newValue;
+                        _superpower = newValue!;
                       });
                     },
                     validator: (value) {
@@ -229,7 +242,7 @@ class _SlambookState extends State<Slambook> {
                       groupValue: _favoriteMotto,
                       onChanged: (String? value) {
                         setState(() {
-                          _favoriteMotto = value;
+                          _favoriteMotto = value!;
                         });
                       },
                     );
@@ -253,7 +266,7 @@ class _SlambookState extends State<Slambook> {
                 ],
               )),
 
-              summary(),
+              // summary(newFriend),
             ],
           ),
         ),
@@ -271,14 +284,14 @@ class _SlambookState extends State<Slambook> {
             title: Text("Friends"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/friends", arguments: widget.friendList);
+              Navigator.pushNamed(context, "/");
             },
           ),
           ListTile( 
             title: Text("Slambook"),
             onTap: () async {
               Navigator.pop(context);
-              final result = await Navigator.pushNamed(context, "/slambook", arguments: widget.friendList);
+              Navigator.pushNamed(context, "/slambook");
             },
           ),
         ],
@@ -286,12 +299,9 @@ class _SlambookState extends State<Slambook> {
     );
   }
 
-  Widget summary() {
-    if (widget.friendList[_nameController.text] != null){
-      final friend = widget.friendList[_nameController.text];
-
-      return Container(
-        
+  Widget summary(Friend newFriend) {
+    return Container(
+    
       padding: EdgeInsets.all(20),
       child: Column(children: [
         Divider(
@@ -304,57 +314,55 @@ class _SlambookState extends State<Slambook> {
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Name'),
-          Text('${friend["Name"]}')
+          Text('${newFriend.name}')
 
         ],),
         SizedBox(height: 8),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Nickname'),
-          Text('${friend["Nickname"]}')
+          Text('${newFriend.nickname}')
 
         ],),
         SizedBox(height: 8),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Age'),
-          Text('${friend["Age"]}')
+          Text('${newFriend.age}')
 
         ],),
         SizedBox(height: 8),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Relationship Status'),
-          Text('${friend["Relationship Status"]}')
+          Text('${newFriend.relationshipStatus}')
 
         ],),
         SizedBox(height: 8),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Happiness Level'),
-          Text('${friend["Happiness Level"]}')
+          Text('${newFriend.happinessLevel}')
 
         ],),
         SizedBox(height: 8),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Superpower'),
-          Text('${friend["Superpower"]}')
+          Text('${newFriend.superpower}')
 
         ],),
         SizedBox(height: 8),
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Favorite Motto'),
-          Text('${friend["Favorite Motto"]}')
+          Text('${newFriend.favoriteMoto}')
 
         ],),
       ],
       ),
     );
-    }else {return SizedBox(height: 0);
-  }
-  
+    
   }
 
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "394701292156",
+    "project_id": "cmsc23-slambook-baybay",
+    "storage_bucket": "cmsc23-slambook-baybay.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:394701292156:android:9cfc9bb83637437be3bff9",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVSQ51CtpgvqtOLzY4HNBBbMdniSxS27Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
