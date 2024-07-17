@@ -44,6 +44,8 @@ class _SlambookState extends State<Slambook> {
   String _superpower = _dropdownOptions.first;
   String _favoriteMotto = _motto.first;
 
+  Friend?_submittedFriend;
+
   
   void _resetForm() {
     _formKey.currentState?.reset();
@@ -82,7 +84,7 @@ class _SlambookState extends State<Slambook> {
 
       setState(() {
         context.read<FriendsListProvider>().addFriend(newFriend);
-        summary(newFriend);
+        _submittedFriend = newFriend;
       });
       
 
@@ -266,7 +268,9 @@ class _SlambookState extends State<Slambook> {
                 ],
               )),
 
-              // summary(newFriend),
+              _submittedFriend != null ?
+              summary(_submittedFriend!)
+              : Container(),
             ],
           ),
         ),
