@@ -12,14 +12,14 @@ class UserAuthProvider with ChangeNotifier {
     userStream = authService.getUserStream();
   }
 
-  Future<String> signIn(String email, String password) async {
-    String response = await authService.signIn(email, password);
+  Future<String> signIn(String username, String password) async {
+    String response = await authService.signIn(username, password);
     notifyListeners();
     return response;
   }
 
-  Future<String> signUp(String email, String password) async {
-    String response = await authService.signUp(email, password);
+  Future<String> signUp(String email, String password, String name, String username, List<String> contactNumbers) async {
+    String response = await authService.signUp(email, password, name, username, contactNumbers);
     notifyListeners();
     return response;
   }

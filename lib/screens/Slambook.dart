@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_exr4/models/friends_model.dart';
-import 'package:flutter_app_exr4/providers/slambook_provider.dart';
+import '../models/friends_model.dart';
+import '../providers/slambook_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
@@ -99,6 +99,7 @@ class _SlambookState extends State<Slambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){}, child: Icon(Icons.add),),
       appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
       backgroundColor: Color.fromARGB(255, 195,211,235),
       drawer: drawer(),

@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_exr4/models/friends_model.dart';
-import 'package:flutter_app_exr4/providers/slambook_provider.dart';
-import 'package:flutter_app_exr4/screens/FriendsDetailsPage.dart';
+import '../models/friends_model.dart';
+import '../providers/slambook_provider.dart';
+import '../screens/FriendsDetailsPage.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';

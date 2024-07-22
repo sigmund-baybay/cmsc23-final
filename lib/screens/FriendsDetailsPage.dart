@@ -1,10 +1,13 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/friends_model.dart';
 import '../providers/slambook_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FriendDetailPage extends StatelessWidget {
   Friend friend;
+  File? imageFile;
 
   FriendDetailPage({required this.friend, super.key});
 
@@ -19,6 +22,31 @@ class FriendDetailPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Center(child: Text("Summary", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
+            
+            // Row(mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //   ElevatedButton(onPressed: () async {
+            //     final image = await ImagePicker()
+            //       .pickImage(source: ImageSource.camera);
+                
+            //     setState(() {
+            //       imageFile = image == null ? null : File(image.path);
+            //     });
+              
+            //   }, 
+            //   child: Padding(padding: 
+            //   EdgeInsets.all(10), child: Icon(Icons.camera_alt_outlined,),),),
+
+            //   imageFile == null
+            //       ? Container()
+            //       : Padding(
+            //           padding: const EdgeInsets.all(30),
+            //           child: ClipRect(
+            //             child:  Image.file(imageFile!, fit: BoxFit.cover, width: 50, height: 50,),
+            //           ),
+            //         ),
+
+            // ],),
 
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

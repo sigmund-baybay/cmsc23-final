@@ -55,7 +55,7 @@ class _SignInPageState extends State<SignInPage> {
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               label: Text("Email"),
-              hintText: "juandelacruz09@gmail.com"),
+              hintText: "example@gmail.com"),
           onSaved: (value) => setState(() => email = value),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -72,7 +72,7 @@ class _SignInPageState extends State<SignInPage> {
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
               label: Text("Password"),
-              hintText: "******"),
+              hintText: "********"),
           obscureText: true,
           onSaved: (value) => setState(() => password = value),
           validator: (value) {

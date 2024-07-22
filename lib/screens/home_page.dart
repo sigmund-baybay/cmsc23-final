@@ -6,8 +6,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_exr4/models/friends_model.dart';
-import 'package:flutter_app_exr4/screens/FriendsList.dart';
+import '../models/friends_model.dart';
+import '../screens/FriendsList.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'signin_page.dart';

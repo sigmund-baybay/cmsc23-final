@@ -42,12 +42,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions web = FirebaseOptions(
     apiKey: 'AIzaSyDx9zGbjE6bK_nyL5eqXY97t6kPAcWAA50',
-    appId: '1:394701292156:web:ef4c04c60c6228dae3bff9',
+    appId: '1:394701292156:web:449722f03ae283e2e3bff9',
     messagingSenderId: '394701292156',
     projectId: 'cmsc23-slambook-baybay',
     authDomain: 'cmsc23-slambook-baybay.firebaseapp.com',
     storageBucket: 'cmsc23-slambook-baybay.appspot.com',
-    measurementId: 'G-YYHYSNQWTZ',
+    measurementId: 'G-65ZFHZ0CRC',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -78,11 +78,12 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions windows = FirebaseOptions(
     apiKey: 'AIzaSyDx9zGbjE6bK_nyL5eqXY97t6kPAcWAA50',
-    appId: '1:394701292156:web:449722f03ae283e2e3bff9',
+    appId: '1:394701292156:web:ed9529fc2a635cb9e3bff9',
     messagingSenderId: '394701292156',
     projectId: 'cmsc23-slambook-baybay',
     authDomain: 'cmsc23-slambook-baybay.firebaseapp.com',
     storageBucket: 'cmsc23-slambook-baybay.appspot.com',
-    measurementId: 'G-65ZFHZ0CRC',
+    measurementId: 'G-CE8E91LTW6',
   );
+
 }

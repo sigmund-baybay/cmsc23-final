@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_exr4/providers/auth_provider.dart';
+import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_app_exr4/firebase_options.dart';
+import 'package:flutter_app_mini_project/firebase_options.dart';
 import 'screens/FriendsList.dart';
 import 'screens/Slambook.dart';
 import 'providers/slambook_provider.dart';

@@ -11,8 +11,11 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
+  String? name;
+  String? username;
   String? email;
   String? password;
+  List<String>? contactNumbers = [''];
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +28,7 @@ class _SignUpState extends State<SignUpPage> {
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [heading, emailField, passwordField, submitButton],
+                children: [heading, nameField, usernameField, emailField, passwordField, ...contactFields(), addContactButton, submitButton],
               ),
             )),
       ),
@@ -37,6 +40,40 @@ class _SignUpState extends State<SignUpPage> {
         child: Text(
           "Sign Up",
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+        ),
+      );
+
+  Widget get nameField => Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: TextFormField(
+          decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              label: Text("Name"),
+              hintText: "Enter a valid name"),
+          onSaved: (value) => setState(() => name = value),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a valid email format";
+            }
+            return null;
+          },
+        ),
+      );
+
+  Widget get usernameField => Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: TextFormField(
+          decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              label: Text("Username"),
+              hintText: "Enter a valid username"),
+          onSaved: (value) => setState(() => username = value),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Please enter a valid email format";
+            }
+            return null;
+          },
         ),
       );
 
@@ -75,6 +112,54 @@ class _SignUpState extends State<SignUpPage> {
         ),
       );
 
+  List<Widget> contactFields() {
+    return contactNumbers!.asMap().entries.map((entry) {
+      int index = entry.key;
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextFormField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    label: Text("Contact No."),
+                    hintText: "Enter a valid contact number"),
+                onSaved: (value) => contactNumbers?[index] = value!,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter a valid contact number";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.remove_circle),
+              onPressed: () {
+                setState(() {
+                  contactNumbers!.removeAt(index);
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  Widget get addContactButton => Padding(
+        padding: const EdgeInsets.only(bottom: 30),
+        child: ElevatedButton(
+          onPressed: () {
+            setState(() {
+              contactNumbers!.add('');
+            });
+          },
+          child: const Text("Add Contact Number"),
+        ),
+      );
+
   Widget get submitButton => ElevatedButton(
       onPressed: () async {
         if (_formKey.currentState!.validate()) {
@@ -82,7 +167,7 @@ class _SignUpState extends State<SignUpPage> {
           await context
               .read<UserAuthProvider>()
               .authService
-              .signUp(email!, password!);
+              .signUp(email!, password!, name!, username!, contactNumbers!);
 
           // check if the widget hasn't been disposed of after an asynchronous action
           if (mounted) Navigator.pop(context);
