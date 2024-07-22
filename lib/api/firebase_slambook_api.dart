@@ -1,12 +1,15 @@
 // API is for backend and database operations
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseSlambookAPI {
   final FirebaseFirestore db = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   Stream<QuerySnapshot> getAllFriends() {
-    return db.collection("friendsList").snapshots();
+    String uid = auth.currentUser!.uid;
+    return db.collection("friendsList").where("uid", isEqualTo: uid).snapshots();
   }
 
   Future<String> addFriend(Map<String, dynamic> friend) async {

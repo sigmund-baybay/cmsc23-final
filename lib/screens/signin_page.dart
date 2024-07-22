@@ -13,7 +13,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
-  String? email;
+  String? username;
   String? password;
   bool showSignInErrorMessage = false;
 
@@ -54,12 +54,12 @@ class _SignInPageState extends State<SignInPage> {
         child: TextFormField(
           decoration: const InputDecoration(
               border: OutlineInputBorder(),
-              label: Text("Email"),
-              hintText: "example@gmail.com"),
-          onSaved: (value) => setState(() => email = value),
+              label: Text("Username"),
+              hintText: "username"),
+          onSaved: (value) => setState(() => username = value),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Please enter your email";
+              return "Please enter your username";
             }
             return null;
           },
@@ -87,7 +87,7 @@ class _SignInPageState extends State<SignInPage> {
   Widget get signInErrorMessage => const Padding(
         padding: EdgeInsets.only(bottom: 30),
         child: Text(
-          "Invalid email or password",
+          "Invalid username or password",
           style: TextStyle(color: Colors.red),
         ),
       );
@@ -99,7 +99,7 @@ class _SignInPageState extends State<SignInPage> {
           String? message = await context
               .read<UserAuthProvider>()
               .authService
-              .signIn(email!, password!);
+              .signIn(username!, password!);
 
           print(message);
           print(showSignInErrorMessage);

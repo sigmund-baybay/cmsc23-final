@@ -15,7 +15,19 @@ class FirebaseAuthAPI {
 
   Future<String> signIn(String username, String password) async {
     try {
-      await auth.signInWithEmailAndPassword(email: username, password: password);
+      final QuerySnapshot result = await db
+      .collection("users")
+      .where('username', isEqualTo: username)
+      .get();
+
+      if (result.docs.isEmpty) {
+        return "Username not found";
+      }
+
+      var data = result.docs.first.data() as Map;
+      var email = data["email"];
+
+      await auth.signInWithEmailAndPassword(email: email, password: password);
       return "Successfully signed in!";
     } on FirebaseAuthException catch(e) {
       return "Failed at error: ${e.code}";
@@ -25,7 +37,8 @@ class FirebaseAuthAPI {
   Future<String> signUp(String email, String password, String name, String username, List<String> contactNumbers) async {
     try {
       await auth.createUserWithEmailAndPassword(email: email, password: password);
-      await db.collection("users").add({"email": email, "name": name, "username": username, "contactNumbers": contactNumbers});
+      String uid = auth.currentUser!.uid;
+      await db.collection("users").doc(uid).set({"email": email, "name": name, "username": username, "contactNumbers": contactNumbers});
       return "Successfully created account!";
     } on FirebaseAuthException catch(e) {
       return "Failed at error: ${e.code}";
@@ -34,11 +47,6 @@ class FirebaseAuthAPI {
 
   Future<void> signOut() async {
     await auth.signOut();
-  }
-
-  Future<String> getEmail(String username) async {
-    return "";
-
   }
 
 }
