@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
             return const SignInPage();  // Will go to the sign in page if user is not logged in
           }
 
-          // if user is logged in, display the scaffold containing the streambuilder for the todos
+          // if user is logged in, display the scaffold containing the friendslist
           return FriendsList();
         });
   }

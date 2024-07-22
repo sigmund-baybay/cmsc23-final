@@ -19,7 +19,7 @@ class FriendsList extends StatefulWidget {
 class _FriendsState extends State<FriendsList> {
   @override
   Widget build(BuildContext context) {
-    Stream<QuerySnapshot> slambookStream = context.watch<FriendsListProvider>().slambook;
+    Stream<QuerySnapshot> slambookStream = context.read<FriendsListProvider>().slambook;
     return Scaffold(
       appBar: AppBar(title: Text('Friends List',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
       backgroundColor: Color.fromARGB(255, 195,211,235),
@@ -85,6 +85,13 @@ class _FriendsState extends State<FriendsList> {
         children: [
           DrawerHeader(child: Text("Exercise 5: Menu, Routes, and Navigation", style: TextStyle(color: Colors.white),),
           decoration: BoxDecoration(color:Color.fromARGB(255,14,14,66)),),
+          ListTile(
+            title: Text("Profile"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, "/profile");
+            },
+          ),
           ListTile(
             title: Text("Friends"),
             onTap: () {

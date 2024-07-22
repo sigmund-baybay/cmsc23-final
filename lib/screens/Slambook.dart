@@ -99,7 +99,7 @@ class _SlambookState extends State<Slambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){}, child: Icon(Icons.add),),
+      floatingActionButton: FloatingActionButton(onPressed: (){}, child: Icon(Icons.qr_code),),
       appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
       backgroundColor: Color.fromARGB(255, 195,211,235),
       drawer: drawer(),
@@ -287,6 +287,13 @@ class _SlambookState extends State<Slambook> {
         children: [
           DrawerHeader(child: Text("Exercise 5: Menu, Routes, and Navigation", style: TextStyle(color: Colors.white),),
           decoration: BoxDecoration(color:Color.fromARGB(255,14,14,66)),),
+          ListTile(
+            title: Text("Profile"),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, "/profile");
+            },
+          ),
           ListTile(
             title: Text("Friends"),
             onTap: () {

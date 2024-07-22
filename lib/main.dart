@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_mini_project/screens/ProfilePage.dart';
 import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app_mini_project/firebase_options.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const HomePage(),
         '/friends': (context) =>FriendsList(),
         '/slambook': (context) => Slambook(),
+        '/profile': (context) => ProfilePage(),
         },
       theme: ThemeData(
       ),
