@@ -1,4 +1,4 @@
-# Week 8: Data Persistence Using Firebase
+# Final Mini Project
 
 **Name:** Baybay, Sigmund Oscar O. <br/>
 **Section:** U-2L <br/>

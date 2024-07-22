@@ -4,6 +4,8 @@ import 'package:flutter_app_exr4/models/friends_model.dart';
 import 'package:flutter_app_exr4/providers/slambook_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/auth_provider.dart';
+
 class Slambook extends StatefulWidget {
 
   Slambook({super.key});
@@ -298,6 +300,13 @@ class _SlambookState extends State<Slambook> {
               Navigator.pushNamed(context, "/slambook");
             },
           ),
+          ListTile(
+          title: const Text('Logout'),
+          onTap: () {
+            context.read<UserAuthProvider>().signOut();
+            Navigator.pop(context);
+          },
+        ),
         ],
       ),
     );

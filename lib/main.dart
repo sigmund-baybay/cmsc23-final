@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_exr4/providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app_exr4/firebase_options.dart';
 import 'screens/FriendsList.dart';
 import 'screens/Slambook.dart';
 import 'providers/slambook_provider.dart';
+import 'screens/home_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +18,7 @@ Future<void> main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: ((context) => FriendsListProvider())),
-        // ChangeNotifierProvider(create: ((context) => UserAuthProvider()))
+        ChangeNotifierProvider(create: ((context) => UserAuthProvider()))
       ],
       child: MyApp(),
     ),
@@ -32,7 +34,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: "/",
       routes:{
-        '/': (context) =>FriendsList(),
+        '/': (context) => const HomePage(),
+        '/friends': (context) =>FriendsList(),
         '/slambook': (context) => Slambook(),
         },
       theme: ThemeData(
