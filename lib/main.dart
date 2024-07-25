@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_mini_project/screens/ProfilePage.dart';
+import 'package:flutter_app_mini_project/screens/QRCode.dart';
 import '../providers/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_app_mini_project/firebase_options.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Slambook',
       initialRoute: "/",
       routes:{
         '/': (context) => const HomePage(),

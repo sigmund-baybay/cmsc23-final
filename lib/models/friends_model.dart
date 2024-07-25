@@ -9,6 +9,7 @@ class Friend {
   double happinessLevel;
   String? superpower;
   String? favoriteMoto;
+  String? uid;
 
   Friend({
     this.id,
@@ -19,6 +20,7 @@ class Friend {
     required this.happinessLevel,
     required this.superpower,
     required this.favoriteMoto,
+    required this.uid
   });
 
   // Factory constructor to instantiate object from json format
@@ -32,6 +34,7 @@ class Friend {
       happinessLevel: json['happinessLevel'],
       superpower: json['superpower'],
       favoriteMoto: json['favoriteMoto'],
+      uid: json['uid']
     );
   }
 
@@ -49,6 +52,7 @@ class Friend {
       'happinessLevel': friend.happinessLevel,
       'superpower': friend.superpower,
       'favoriteMoto': friend.favoriteMoto,
+      'uid': friend.uid
     };
   }
 }

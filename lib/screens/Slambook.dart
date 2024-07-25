@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import '../screens/QRCode.dart';
 import '../models/friends_model.dart';
 import '../providers/slambook_provider.dart';
 import 'package:provider/provider.dart';
@@ -64,17 +65,10 @@ class _SlambookState extends State<Slambook> {
 
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
+      String uid = context.read<UserAuthProvider>().uid;
+      print(uid);
+
       String name = _nameController.text;
-
-      // bool exists = context.read<FriendsListProvider>().checkExistingName(name);
-
-      // if(exists){
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text('Name already exists')));
-      //     _resetForm();
-      //     return;
-      // }
-
       Friend newFriend = 
       Friend(name: name, 
       nickname: _nicknameController.text, 
@@ -82,7 +76,8 @@ class _SlambookState extends State<Slambook> {
       relationshipStatus: _relationshipStatus ? "Single" : "Not Single", 
       happinessLevel: _happinessLevel, 
       superpower: _superpower, 
-      favoriteMoto: _favoriteMotto);
+      favoriteMoto: _favoriteMotto,
+      uid: uid);
 
       setState(() {
         context.read<FriendsListProvider>().addFriend(newFriend);
@@ -99,7 +94,10 @@ class _SlambookState extends State<Slambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){}, child: Icon(Icons.qr_code),),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.pop(context);
+        Navigator.pushNamed(context, "/scan");
+      }, child: Icon(Icons.qr_code),),
       appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
       backgroundColor: Color.fromARGB(255, 195,211,235),
       drawer: drawer(),
@@ -298,7 +296,7 @@ class _SlambookState extends State<Slambook> {
             title: Text("Friends"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/");
+              Navigator.popAndPushNamed(context, "/friends");
             },
           ),
           ListTile( 

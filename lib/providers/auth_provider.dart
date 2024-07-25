@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../api/firebase_auth_api.dart';
@@ -5,17 +6,14 @@ import '../api/firebase_auth_api.dart';
 class UserAuthProvider with ChangeNotifier {
   late FirebaseAuthAPI authService;
   late Stream<User?> userStream;
-  User? user;
 
   UserAuthProvider() {
     authService = FirebaseAuthAPI();
     userStream = authService.getUserStream();
   }
 
-  Future<User?> getUser () async {
-    return authService.getUser();
-
-  }
+  User? get user => authService.getUser();
+  String get uid => authService.getUserId();
 
   Future<String> signIn(String username, String password) async {
     String response = await authService.signIn(username, password);
@@ -33,4 +31,17 @@ class UserAuthProvider with ChangeNotifier {
     await authService.signOut();
     notifyListeners();
   }
+
+   Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails(uid) async {
+    return await authService.getUserDetails(uid);
+
+  }
+
+  String getUserId() {
+    final details = authService.getUserId();
+    notifyListeners();
+    return details;
+
+  }
+
 }

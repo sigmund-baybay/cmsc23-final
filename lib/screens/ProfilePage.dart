@@ -16,91 +16,169 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  
   File? imageFile;
+
+  Future<void> _pickImage() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    setState(() {
+      imageFile = image == null ? null : File(image.path);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    var user = context.read<UserAuthProvider>().user!.uid;
+    var details =  context.read<UserAuthProvider>().getUserDetails(user);
+    if (user == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("Profile")),
+        body: Center(child: const Text('No user is logged in')),
+      );
+    }
+
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          
-        }, child: Icon(Icons.qr_code),),
-      appBar: AppBar(title: Text('Profile',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
-      backgroundColor: Color.fromARGB(255, 195,211,235),
-      drawer: drawer(),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+      floatingActionButton: FloatingActionButton(onPressed: (){
+      }, child: Icon(Icons.qr_code),),
+      appBar: AppBar(
+        title: const Text("Profile"),
+        backgroundColor: Color.fromARGB(255, 14, 14, 66),
+      ),
+      backgroundColor: Color.fromARGB(255, 195, 211, 235),
+      drawer: _drawer(),
+      body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+        future: details,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            return Center(child: Text('No user data found'));
+          }
 
-            Row(mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            ElevatedButton(onPressed: ()async{
-            final image = await ImagePicker()
-              .pickImage(source: ImageSource.camera);
-            
-            setState(() {
-              imageFile = image == null ? null : File(image.path);
-            });
-            
-            }, 
-            child: Padding(padding: 
-            EdgeInsets.all(10), child: Icon(Icons.camera_alt_outlined,),),),
+          final details = snapshot.data!.data()!;
+          final name = details['name'] ?? 'No Name';
+          final username = details['username'] ?? 'No Username';
+          final email = details['email'] ?? context.read<UserAuthProvider>().user!.email;
+          final contactNumbers = List<String>.from(details['contactNumbers'] ?? []);
 
-            imageFile == null
-                ? Container()
-                : Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: ClipRect(
-                      child:  Image.file(imageFile!, fit: BoxFit.cover, width: 50, height: 50,),
+          return Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _pickImage,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Icon(Icons.camera_alt_outlined),
+                      ),
                     ),
-                  ),
-
-            ],),
-      
-          ],
-      
-        ),
-      )
+                    imageFile == null
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(30),
+                            child: ClipRect(
+                              child: Image.file(
+                                imageFile!,
+                                fit: BoxFit.cover,
+                                width: 50,
+                                height: 50,
+                              ),
+                            ),
+                          ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Name:'),
+                    Text(name),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Username:'),
+                    Text(username),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Email:'),
+                    Text(email),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Contact Numbers:'),
+                    ...contactNumbers.map((number) => Text(number)).toList(),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Edit details functionality here
+                  },
+                  child: const Text('Edit Details'),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
-  Widget drawer() {
+  Widget _drawer() {
     return Drawer(
-      child: ListView(padding: EdgeInsets.zero,
+      child: ListView(
+        padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(child: Text("Exercise 5: Menu, Routes, and Navigation", style: TextStyle(color: Colors.white),),
-          decoration: BoxDecoration(color:Color.fromARGB(255,14,14,66)),),
+          DrawerHeader(
+            child: const Text(
+              "Exercise 5: Menu, Routes, and Navigation",
+              style: TextStyle(color: Colors.white),
+            ),
+            decoration: BoxDecoration(color: Color.fromARGB(255, 14, 14, 66)),
+          ),
           ListTile(
-            title: Text("Profile"),
+            title: const Text("Profile"),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamed(context, "/profile");
             },
           ),
           ListTile(
-            title: Text("Friends"),
+            title: const Text("Friends"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/");
+              Navigator.popAndPushNamed(context, "/friends");
             },
           ),
           ListTile(
-            title: Text("Slambook"),
+            title: const Text("Slambook"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/slambook",);
+              Navigator.pushNamed(context, "/slambook");
             },
           ),
           ListTile(
-          title: const Text('Logout'),
-          onTap: () {
-            context.read<UserAuthProvider>().signOut();
-            Navigator.pop(context);
-          },
-        ),
+            title: const Text('Logout'),
+            onTap: () {
+              context.read<UserAuthProvider>().signOut();
+              Navigator.pop(context);
+            },
+          ),
         ],
       ),
     );

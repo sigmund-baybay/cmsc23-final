@@ -38,6 +38,7 @@ class FirebaseAuthAPI {
     try {
       await auth.createUserWithEmailAndPassword(email: email, password: password);
       final uid = auth.currentUser!.uid;
+      print(uid);
       await db.collection("users").doc(uid).set({"email": email, "name": name, "username": username, "contactNumbers": contactNumbers});
       return "Successfully created account!";
     } on FirebaseAuthException catch(e) {
@@ -49,10 +50,14 @@ class FirebaseAuthAPI {
     await auth.signOut();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails() async {
-    final uid = auth.currentUser!.uid;
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserDetails(uid) async {
     return await db.collection("users").doc(uid).get();
 
+  }
+
+  String getUserId() {
+    return auth.currentUser!.uid;
+    
   }
 
 }

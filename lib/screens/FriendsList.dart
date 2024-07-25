@@ -96,7 +96,7 @@ class _FriendsState extends State<FriendsList> {
             title: Text("Friends"),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamed(context, "/");
+              Navigator.popAndPushNamed(context, "/friends");
             },
           ),
           ListTile(

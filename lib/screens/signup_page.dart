@@ -53,7 +53,7 @@ class _SignUpState extends State<SignUpPage> {
           onSaved: (value) => setState(() => name = value),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Please enter a valid email format";
+              return "Please enter a valid  name";
             }
             return null;
           },
@@ -70,7 +70,7 @@ class _SignUpState extends State<SignUpPage> {
           onSaved: (value) => setState(() => username = value),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Please enter a valid email format";
+              return "Please enter a valid username";
             }
             return null;
           },

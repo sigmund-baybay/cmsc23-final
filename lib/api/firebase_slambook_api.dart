@@ -14,8 +14,6 @@ class FirebaseSlambookAPI {
 
   Future<String> addFriend(Map<String, dynamic> friend) async {
     try{
-      String uid = auth.currentUser!.uid;
-      friend['uid'] = uid;
       await db.collection("friendsList").add(friend);
       return "Successfully added!";
     } on FirebaseException catch (e) {

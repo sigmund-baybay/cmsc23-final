@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_mini_project/screens/QRCode.dart';
 import 'package:provider/provider.dart';
 import '../models/friends_model.dart';
 import '../providers/slambook_provider.dart';
@@ -14,6 +15,14 @@ class FriendDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QRCodePage(friend: friend,),
+          ),
+        );
+      }, child: Icon(Icons.qr_code),),
       appBar: AppBar(title: Text(friend.name)),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

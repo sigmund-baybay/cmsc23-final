@@ -21,9 +21,9 @@
 
 ## References
 
-- link to the reference
-- another link
 - https://github.com/abigailnadua/week8_discussion_template.git
 - https://github.com/CMSC23-Midyear2024/week4-5-user-interactivity-menu-navigation-sigmund-baybay.git
 - https://stackoverflow.com/questions/51122211/check-if-field-already-exists-in-flutter-firestore
 - https://stackoverflow.com/questions/64808050/set-custom-document-id-in-flutter-cloud-firestore
+- https://pub.dev/packages/qr_flutter/example
+- https://pub.dev/packages/qr_code_scanner/example
