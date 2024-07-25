@@ -30,6 +30,15 @@ class FirebaseSlambookAPI {
     }
   }
 
+  Future<String> editedProfile(String id, String nickname, int age, String relationshipStatus, double happinessLevel, String superpower, String favoriteMoto) async {
+    try{
+      await db.collection("users").doc(id).update({"nickname": nickname, "age": age, "relationshipStatus": relationshipStatus, "happinessLevel": happinessLevel, "superpower": superpower, "favoriteMoto": favoriteMoto});
+      return "Successfully updated!";
+    } on FirebaseException catch (e) {
+      return "Failed with error: ${e.code}";
+    }
+  }
+
   Future<String> deleteFriend(String id) async {
     try{
       await db.collection("friendsList").doc(id).delete();

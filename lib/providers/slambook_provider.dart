@@ -39,6 +39,20 @@ class FriendsListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void editedProfile(Friend friend, String newNickname, int newAge, String newRelationshipStatus, double newHappinessLevel, String newSuperpower, String newFavoriteMoto) {
+    friend.nickname = newNickname;
+    friend.age = newAge;
+    friend.relationshipStatus = newRelationshipStatus;
+    friend.happinessLevel = newHappinessLevel;
+    friend.superpower = newSuperpower;
+    friend.favoriteMoto = newFavoriteMoto;
+    firebaseService.editedFriend(friend.id!, newNickname, newAge, newRelationshipStatus, newHappinessLevel, newSuperpower, newFavoriteMoto).then((message){
+      print(message);
+    });
+    notifyListeners();
+  }
+
+
   void deleteFriend(Friend friend) {
     firebaseService.deleteFriend(friend.id!).then((message){
       print(message);

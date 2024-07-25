@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import '../screens/QRCode.dart';
+import 'package:flutter_app_mini_project/screens/QRCodeScanner.dart';
+import 'QRCodePage.dart';
 import '../models/friends_model.dart';
-import '../providers/slambook_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/slambook_provider.dart';
 import '../providers/auth_provider.dart';
 
 class Slambook extends StatefulWidget {
@@ -57,7 +58,7 @@ class _SlambookState extends State<Slambook> {
     _ageController.clear();
     setState(() {
       _relationshipStatus = false;
-      _happinessLevel = 0;
+      _happinessLevel = 0.0;
       _superpower = _dropdownOptions.first;
       _favoriteMotto = _motto.first;
     });
@@ -95,8 +96,7 @@ class _SlambookState extends State<Slambook> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.pop(context);
-        Navigator.pushNamed(context, "/scan");
+        _scanQRCode(context);
       }, child: Icon(Icons.qr_code),),
       appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
       backgroundColor: Color.fromARGB(255, 195,211,235),
@@ -384,4 +384,13 @@ class _SlambookState extends State<Slambook> {
     
   }
 
+}
+
+void _scanQRCode(context) {
+  Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => QRCodeScanner(),
+          ),
+        );
 }

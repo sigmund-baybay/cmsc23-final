@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_mini_project/screens/QRCode.dart';
+import 'package:flutter_app_mini_project/screens/QRCodePage.dart';
 import 'package:provider/provider.dart';
 import '../models/friends_model.dart';
 import '../providers/slambook_provider.dart';
@@ -15,14 +15,6 @@ class FriendDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => QRCodePage(friend: friend,),
-          ),
-        );
-      }, child: Icon(Icons.qr_code),),
       appBar: AppBar(title: Text(friend.name)),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -160,7 +152,7 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
   String _superpower = _dropdownOptions.first;
   String _favoriteMotto = _motto.first;
 
-
+  @override
   void initState(){
     super.initState();
     _nicknameController.text = widget.friend.nickname;
@@ -190,7 +182,7 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
       int age = int.parse(_ageController.text);
       String relationshipStatus = _relationshipStatus ? 'Single' : 'Not Single';
 
-      context.read<FriendsListProvider>().editedFriend(widget.friend, nickname, age, relationshipStatus, _happinessLevel, _superpower, _favoriteMotto);
+      context.read<FriendsListProvider>().editedProfile(widget.friend, nickname, age, relationshipStatus, _happinessLevel, _superpower, _favoriteMotto);
 
       print(widget.friend.name);
 

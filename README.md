@@ -27,3 +27,4 @@
 - https://stackoverflow.com/questions/64808050/set-custom-document-id-in-flutter-cloud-firestore
 - https://pub.dev/packages/qr_flutter/example
 - https://pub.dev/packages/qr_code_scanner/example
+- https://youtu.be/hyKy7HtGbog?feature=shared
