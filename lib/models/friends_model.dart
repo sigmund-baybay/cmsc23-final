@@ -8,7 +8,8 @@ class Friend {
   String relationshipStatus;
   double happinessLevel;
   String? superpower;
-  String? favoriteMoto;
+  String? favoriteMotto;
+  bool verified;
   String? uid;
 
   Friend({
@@ -19,7 +20,8 @@ class Friend {
     required this.relationshipStatus,
     required this.happinessLevel,
     required this.superpower,
-    required this.favoriteMoto,
+    required this.favoriteMotto,
+    required this.verified,
     required this.uid
   });
 
@@ -31,9 +33,10 @@ class Friend {
       nickname: json['nickname'],
       age: json['age'],
       relationshipStatus: json['relationshipStatus'],
-      happinessLevel: json['happinessLevel'],
+      happinessLevel: json['happinessLevel'].toDouble(),
       superpower: json['superpower'],
-      favoriteMoto: json['favoriteMoto'],
+      favoriteMotto: json['favoriteMoto'],
+      verified: json['verified'],
       uid: json['uid']
     );
   }
@@ -51,7 +54,8 @@ class Friend {
       'relationshipStatus': friend.relationshipStatus,
       'happinessLevel': friend.happinessLevel,
       'superpower': friend.superpower,
-      'favoriteMoto': friend.favoriteMoto,
+      'favoriteMoto': friend.favoriteMotto,
+      'verified': friend.verified,
       'uid': friend.uid
     };
   }

@@ -60,4 +60,20 @@ class FirebaseAuthAPI {
     
   }
 
+  Future<bool> existingName(username) async {
+    final QuerySnapshot result = await db
+      .collection("users")
+      .where('username', isEqualTo: username)
+      .get();
+
+    if (result.docs.isEmpty){
+      return false;
+
+    }else{
+      return true;
+
+    }
+
+  }
+
 }

@@ -1,13 +1,6 @@
-/*
-  Created by: Claizel Coubeili Cepe
-  Date: updated April 26, 2023
-  Description: Sample todo app with Firebase 
-*/
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../models/friends_model.dart';
-import '../screens/FriendsList.dart';
+import 'package:flutter_app_mini_project/screens/ProfilePage.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
 import 'signin_page.dart';
@@ -44,7 +37,7 @@ class _HomePageState extends State<HomePage> {
           }
 
           // if user is logged in, display the scaffold containing the friendslist
-          return FriendsList();
+          return ProfilePage();
         });
   }
 }

@@ -1,110 +1,243 @@
 import 'dart:io';
+import 'dart:ui';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_mini_project/screens/QRCodePage.dart';
 import 'package:provider/provider.dart';
 import '../models/friends_model.dart';
 import '../providers/slambook_provider.dart';
 import 'package:image_picker/image_picker.dart';
 
-class FriendDetailPage extends StatelessWidget {
-  Friend friend;
+class FriendDetailPage extends StatefulWidget {
+  final Friend friend;
 
   FriendDetailPage({required this.friend, super.key});
 
   @override
+  State<FriendDetailPage> createState() => __FriendDetailPageState();
+}
+
+class __FriendDetailPageState extends State<FriendDetailPage>{
+  File? image;
+  String? pfpImage;
+
+  @override
+  void initState() {
+    super.initState();
+    _getProfilePic();
+  }
+
+  // Check if profile page is already existing
+  Future<void> _getProfilePic() async {
+    final storageRef = FirebaseStorage.instance.ref().child("pfp/${widget.friend.id}.jpg");
+
+    try {
+      final url = await storageRef.getDownloadURL();
+      setState(() {
+        pfpImage = url;
+      });
+    } catch (e) {
+      print("Failed to retrieve profile picture: $e");
+      setState(() {
+        pfpImage = null;
+      });
+    }
+  }
+
+  Future<void> _uploadProfilePic(File imageFile) async {
+    final storageRef = FirebaseStorage.instance.ref().child("pfp/${widget.friend.id}.jpg");
+
+    try {
+      final uploadTask = storageRef.putFile(imageFile);
+      final snapshot = await uploadTask.whenComplete(() {});
+      final url = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        pfpImage = url;
+      });
+    } catch (e) {
+      print("Failed to upload profile picture: $e");
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      appBar: AppBar(title: Text(friend.name)),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Center(child: Text("Summary", style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold))),
-
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Name'),
-              Text(friend.name)
-
-            ],),
-            SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Nickname'),
-              Text(friend.nickname)
-
-            ],),
-            SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Age'),
-              Text(friend.age.toString())
-
-            ],),
-            SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Relationship Status'),
-              Text(friend.relationshipStatus)
-
-            ],),
-            SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Happiness Level'),
-              Text(friend.happinessLevel.toString())
-
-            ],),
-            SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Superpower'),
-              Text(friend.superpower!)
-
-            ],),
-            SizedBox(height: 8),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              Text('Favorite Motto'),
-              Text(friend.favoriteMoto!)
-
-            ],),
-            SizedBox(height: 20),
-            Center(
-              child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(onPressed: (){
-                  context.read<FriendsListProvider>().deleteFriend(friend);
-                  Navigator.pop(context);
-                }, child: Text("Delete Entry"),
+      appBar: AppBar(
+        title: Text(widget.friend.name),
+        backgroundColor: Color.fromARGB(255, 167, 146, 119),
+      ),
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background.jpg'),
+                  fit: BoxFit.cover,
                 ),
-
-                ElevatedButton(onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FriendsDetailsEdit(friend: friend,),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: Colors.black.withOpacity(0.2),
+                ),
+              ),
+            ),
+          ),
+ 
+          //Center which displays all necessary details
+          Padding(
+            padding: EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundImage: pfpImage == null
+                        ?  AssetImage("assets/temp_pfp.jpg")
+                        : NetworkImage(pfpImage!),
                     ),
-                  );
-                }, child: Text("Edit Entry"),
+                    IconButton(
+                      onPressed: () async {
+                        final takenImage = await ImagePicker().pickImage(source: ImageSource.camera);
+                        if (takenImage != null) {
+                          setState(() {
+                            image = File(takenImage.path);
+                          });
+                          await _uploadProfilePic(image!);
+                        }
+                      },
+                      icon: Icon(Icons.camera_alt),
+                    ),
+                  ],
                 ),
-
-              ],),
-            
+                SizedBox(height: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 209, 187, 158),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Name'),
+                          Text(widget.friend.name),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Nickname'),
+                          Text(widget.friend.nickname),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Age'),
+                          Text(widget.friend.age.toString()),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Relationship Status'),
+                          Text(widget.friend.relationshipStatus),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Happiness Level'),
+                          Text(widget.friend.happinessLevel.toString()),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Superpower'),
+                          Text(widget.friend.superpower!),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Favorite Motto'),
+                          Text(widget.friend.favoriteMotto!),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+                if (!widget.friend.verified)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          context.read<FriendsListProvider>().deleteFriend(widget.friend);
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 167, 146, 119),
+                        ),
+                        child: Text(
+                          "Delete Entry",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FriendsDetailsEdit(friend: widget.friend),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color.fromARGB(255, 167, 146, 119),
+                        ),
+                        child: Text(
+                          "Edit Entry",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  ),
+                SizedBox(height: 10),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color.fromARGB(255, 167, 146, 119),
+                    ),
+                    child: Text(
+                      "Go back",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(height: 8),
-            Center(
-              child: ElevatedButton(onPressed: (){
-                Navigator.pop(context);
-              }, child: Text("Go back"),
-            ),
-            ),
-            
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -112,6 +245,7 @@ class FriendDetailPage extends StatelessWidget {
 
 
 
+//STF to edit the details of a specific friend in the friendslist
 class FriendsDetailsEdit extends StatefulWidget {
   Friend friend;
 
@@ -160,7 +294,7 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
     _relationshipStatus = widget.friend.relationshipStatus == 'Single';
     _happinessLevel = widget.friend.happinessLevel;
     _superpower = widget.friend.superpower ?? _dropdownOptions.first;
-    _favoriteMotto = widget.friend.favoriteMoto ?? _motto.first;
+    _favoriteMotto = widget.friend.favoriteMotto ?? _motto.first;
 
   }
   
@@ -182,12 +316,10 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
       int age = int.parse(_ageController.text);
       String relationshipStatus = _relationshipStatus ? 'Single' : 'Not Single';
 
-      context.read<FriendsListProvider>().editedProfile(widget.friend, nickname, age, relationshipStatus, _happinessLevel, _superpower, _favoriteMotto);
-
-      print(widget.friend.name);
+      context.read<FriendsListProvider>().editedFriend(widget.friend, nickname, age, relationshipStatus, _happinessLevel, _superpower, _favoriteMotto);
 
       Navigator.pop(context);
-      Navigator.pushNamed(context, '/');
+      Navigator.pushNamed(context, "/friends");
 
     }
   }
@@ -196,8 +328,8 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.friend.name,style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
-      backgroundColor: Color.fromARGB(255, 195,211,235),
+      appBar: AppBar(title: Text(widget.friend.name,),backgroundColor: Color.fromARGB(255,167, 146, 119)),
+      backgroundColor: Color.fromARGB(255,209, 187, 158),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -238,7 +370,7 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a number';
                       }
-                      if (int.tryParse(value) == null) {
+                      if (int.tryParse(value) == null || int.tryParse(value)! < 1) {
                         return 'Please enter valid number';
                       }
                       return null;
@@ -342,11 +474,13 @@ class _FriendsDetailsEditState extends State<FriendsDetailsEdit> {
                 children: [
                   ElevatedButton(
                     onPressed: _resetForm,
-                    child: Text('Reset'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 167, 146, 119)),
+                    child: Text('Reset', style: TextStyle(color: Colors.black),),
                   ),
                   ElevatedButton(
                     onPressed: _submitForm,
-                    child: Text('Update'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 167, 146, 119)),
+                    child: Text('Update', style: TextStyle(color: Colors.black),),
                   ),
                 ],
               )),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -20,17 +22,55 @@ class _SignUpState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Container(
-            margin: const EdgeInsets.all(30),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [heading, nameField, usernameField, emailField, passwordField, ...contactFields(), addContactButton, submitButton],
+      
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
-            )),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: Colors.black.withOpacity(0.2),
+                ),
+              ),
+            ),    
+          ),
+          Center(
+            child: SingleChildScrollView(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 209, 187, 158),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      heading,
+                      nameField,
+                      usernameField,
+                      emailField,
+                      passwordField,
+                      ...contactFields(),
+                      addContactButton,
+                      submitButton,
+                      signInButton
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -69,8 +109,9 @@ class _SignUpState extends State<SignUpPage> {
               hintText: "Enter a valid username"),
           onSaved: (value) => setState(() => username = value),
           validator: (value) {
+            final exist = context.read<UserAuthProvider>().authService.existingName(value);
             if (value == null || value.isEmpty) {
-              return "Please enter a valid username";
+              return "Please enter a valid username or username is in use";
             }
             return null;
           },
@@ -156,7 +197,10 @@ class _SignUpState extends State<SignUpPage> {
               contactNumbers!.add('');
             });
           },
-          child: const Text("Add Contact Number"),
+          style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(255, 167, 146, 119)
+        ),
+          child: const Text("Add Contact Number", style: TextStyle(color: Colors.black),),
         ),
       );
 
@@ -172,6 +216,26 @@ class _SignUpState extends State<SignUpPage> {
           // check if the widget hasn't been disposed of after an asynchronous action
           if (mounted) Navigator.pop(context);
         }
+        
       },
-      child: const Text("Sign Up"));
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(255, 167, 146, 119)
+        ),
+      child: const Text("Sign Up", style: TextStyle(color: Colors.black),));
+
+  Widget get signInButton => Padding(
+        padding: const EdgeInsets.all(30),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Have an accout?"),
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(
+                      context);
+                },
+                child: const Text("Sign In", style: TextStyle(color: Color.fromARGB(255, 167, 146, 119)),))
+          ],
+        ),
+      );
 }

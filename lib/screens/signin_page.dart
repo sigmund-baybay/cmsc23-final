@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -19,24 +21,51 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 100, horizontal: 30),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  heading,
-                  emailField,
-                  passwordField,
-                  showSignInErrorMessage ? signInErrorMessage : Container(),
-                  submitButton,
-                  signUpButton
-                ],
+    return Scaffold(  
+      body: Stack(
+        children: [
+           Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/background.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
-            )),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  color: Colors.black.withOpacity(0.2),
+                ),
+              ),
+            ),
+          ),
+          
+          Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 209, 187, 158),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    heading,
+                    emailField,
+                    passwordField,
+                    showSignInErrorMessage ? signInErrorMessage : Container(),
+                    submitButton,
+                    signUpButton,
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],       
       ),
     );
   }
@@ -113,7 +142,10 @@ class _SignInPageState extends State<SignInPage> {
           });
         }
       },
-      child: const Text("Sign In"));
+      style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(255, 167, 146, 119)
+        ),
+      child: const Text("Sign In", style: TextStyle(color: Colors.black),));
 
   Widget get signUpButton => Padding(
         padding: const EdgeInsets.all(30),
@@ -128,7 +160,7 @@ class _SignInPageState extends State<SignInPage> {
                       MaterialPageRoute(
                           builder: (context) => const SignUpPage()));
                 },
-                child: const Text("Sign Up"))
+                child: const Text("Sign Up", style: TextStyle(color: Color.fromARGB(255, 167, 146, 119)),))
           ],
         ),
       );

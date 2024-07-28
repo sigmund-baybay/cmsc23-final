@@ -44,4 +44,11 @@ class UserAuthProvider with ChangeNotifier {
 
   }
 
+  Future<bool> existingName(String username) async {
+      bool response = await authService.existingName(username);
+      notifyListeners();
+      return response;
+  }
+
+
 }

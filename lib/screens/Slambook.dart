@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_app_mini_project/screens/QRCodeScanner.dart';
-import 'QRCodePage.dart';
+import 'package:flutter_app_mini_project/widgets/drawer.dart';
+import 'QRCodeScanner.dart';
 import '../models/friends_model.dart';
-import 'package:provider/provider.dart';
 
+import 'package:provider/provider.dart';
 import '../providers/slambook_provider.dart';
 import '../providers/auth_provider.dart';
 
@@ -77,7 +77,8 @@ class _SlambookState extends State<Slambook> {
       relationshipStatus: _relationshipStatus ? "Single" : "Not Single", 
       happinessLevel: _happinessLevel, 
       superpower: _superpower, 
-      favoriteMoto: _favoriteMotto,
+      favoriteMotto: _favoriteMotto,
+      verified: false,
       uid: uid);
 
       setState(() {
@@ -95,14 +96,17 @@ class _SlambookState extends State<Slambook> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //Floatting button to scan qr code
       floatingActionButton: FloatingActionButton(onPressed: (){
         _scanQRCode(context);
-      }, child: Icon(Icons.qr_code),),
-      appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,14,14,66)),
-      backgroundColor: Color.fromARGB(255, 195,211,235),
-      drawer: drawer(),
+      }, child: Icon(Icons.qr_code),
+      backgroundColor: Color.fromARGB(255, 167, 146, 119),),
+      appBar: AppBar(title: Text('Slambook',style: TextStyle(color: Colors.white),),backgroundColor: Color.fromARGB(255,167, 146, 119)),
+      backgroundColor: Color.fromARGB(255,209, 187, 158),
+      drawer: MyDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+        //Form for friend details
         child: Form(
           key: _formKey,
           child: ListView(
@@ -156,7 +160,7 @@ class _SlambookState extends State<Slambook> {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a number';
                       }
-                      if (int.tryParse(value) == null) {
+                      if (int.tryParse(value) == null || int.tryParse(value)! < 0) {
                         return 'Please enter valid number';
                       }
                       return null;
@@ -260,15 +264,18 @@ class _SlambookState extends State<Slambook> {
                 children: [
                   ElevatedButton(
                     onPressed: _resetForm,
-                    child: Text('Reset'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 167, 146, 119)),
+                    child: Text('Reset', style: TextStyle(color: Colors.black),),
                   ),
                   ElevatedButton(
                     onPressed: _submitForm,
-                    child: Text('Submit'),
+                    style: ElevatedButton.styleFrom(backgroundColor: Color.fromARGB(255, 167, 146, 119)),
+                    child: Text('Submit', style: TextStyle(color: Colors.black),),
                   ),
                 ],
               )),
 
+              //Checks if theres a submitted user, prints the summary
               _submittedFriend != null ?
               summary(_submittedFriend!)
               : Container(),
@@ -278,46 +285,8 @@ class _SlambookState extends State<Slambook> {
       ),
     );
   }
-  
-  Widget drawer() {
-    return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(child: Text("Exercise 5: Menu, Routes, and Navigation", style: TextStyle(color: Colors.white),),
-          decoration: BoxDecoration(color:Color.fromARGB(255,14,14,66)),),
-          ListTile(
-            title: Text("Profile"),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, "/profile");
-            },
-          ),
-          ListTile(
-            title: Text("Friends"),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.popAndPushNamed(context, "/friends");
-            },
-          ),
-          ListTile( 
-            title: Text("Slambook"),
-            onTap: () async {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, "/slambook");
-            },
-          ),
-          ListTile(
-          title: const Text('Logout'),
-          onTap: () {
-            context.read<UserAuthProvider>().signOut();
-            Navigator.pop(context);
-          },
-        ),
-        ],
-      ),
-    );
-  }
 
+  //summary of details presented once submitted to the friendsList
   Widget summary(Friend newFriend) {
     return Container(
     
@@ -375,7 +344,7 @@ class _SlambookState extends State<Slambook> {
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Text('Favorite Motto'),
-          Text('${newFriend.favoriteMoto}')
+          Text('${newFriend.favoriteMotto}')
 
         ],),
       ],

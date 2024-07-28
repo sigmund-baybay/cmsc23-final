@@ -26,33 +26,35 @@ class FriendsListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //Provider in order to edit a friend in the friendsList
   void editedFriend(Friend friend, String newNickname, int newAge, String newRelationshipStatus, double newHappinessLevel, String newSuperpower, String newFavoriteMoto) {
     friend.nickname = newNickname;
     friend.age = newAge;
     friend.relationshipStatus = newRelationshipStatus;
     friend.happinessLevel = newHappinessLevel;
     friend.superpower = newSuperpower;
-    friend.favoriteMoto = newFavoriteMoto;
+    friend.favoriteMotto = newFavoriteMoto;
     firebaseService.editedFriend(friend.id!, newNickname, newAge, newRelationshipStatus, newHappinessLevel, newSuperpower, newFavoriteMoto).then((message){
       print(message);
     });
     notifyListeners();
   }
 
-  void editedProfile(Friend friend, String newNickname, int newAge, String newRelationshipStatus, double newHappinessLevel, String newSuperpower, String newFavoriteMoto) {
-    friend.nickname = newNickname;
-    friend.age = newAge;
-    friend.relationshipStatus = newRelationshipStatus;
-    friend.happinessLevel = newHappinessLevel;
-    friend.superpower = newSuperpower;
-    friend.favoriteMoto = newFavoriteMoto;
-    firebaseService.editedFriend(friend.id!, newNickname, newAge, newRelationshipStatus, newHappinessLevel, newSuperpower, newFavoriteMoto).then((message){
+  //Provider to edit the user's profile
+  void editedProfile(Friend profile, String newNickname, int newAge, String newRelationshipStatus, double newHappinessLevel, String newSuperpower, String newFavoriteMoto) {
+    profile.nickname = newNickname;
+    profile.age = newAge;
+    profile.relationshipStatus = newRelationshipStatus;
+    profile.happinessLevel = newHappinessLevel;
+    profile.superpower = newSuperpower;
+    profile.favoriteMotto = newFavoriteMoto;
+    firebaseService.editedProfile(profile.id!, newNickname, newAge, newRelationshipStatus, newHappinessLevel, newSuperpower, newFavoriteMoto).then((message){
       print(message);
     });
     notifyListeners();
   }
 
-
+  //Provider to delete a friend from the friendsList
   void deleteFriend(Friend friend) {
     firebaseService.deleteFriend(friend.id!).then((message){
       print(message);
@@ -60,6 +62,7 @@ class FriendsListProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  //Provider to check if name already exists in the database
   void checkExistingName(String name) {
     firebaseService.checkExistingName(name).then((exists){
       print(exists);
